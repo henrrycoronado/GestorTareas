@@ -64,19 +64,20 @@ Se utilizó el patrón **Singleton** para gestionar la instancia de conexión a 
 ### 📄 Archivo: `src/services/supabaseClient.js`
 
 ```js
-import { createClient } from "@supabase/supabase-js";
+    import { createClient } from "@supabase/supabase-js";
 
-let supabase;
+    let supabase;
 
-export const getSupabase = () => {
-  if (!supabase) {
-    supabase = createClient(
-      import.meta.env.VITE_SUPABASE_URL,
-      import.meta.env.VITE_SUPABASE_ANON_KEY
-    );
-  }
-  return supabase;
-};
+    export const getSupabase = () => {
+    if (!supabase) {
+        supabase = createClient(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_ANON_KEY
+        );
+    }
+    return supabase;
+    };
+```
     ✅ Ventajas del uso de Singleton:
     🔁 Centraliza la lógica de conexión: el código que se conecta a Supabase está encapsulado en un único archivo reutilizable.
 
@@ -115,7 +116,38 @@ Se implementó el patrón **Repository** mediante el archivo `BussisnessReposito
 
     🧪 Testeo más sencillo: permite hacer mocking del repositorio para pruebas unitarias sin tocar la base de datos.
 
+## Patrón aplicado: **Strategy**
 
+El patrón **Strategy** fue aplicado en `TaskService` para encapsular distintos algoritmos de ordenamiento y filtrado de tareas. Cada estrategia se implementa como un método específico (`OrderByEndDate`, `OrderByCreateDate`, `OrderByCategory`, `OrderByIncomplete`) y puede aplicarse dinámicamente en tiempo de ejecución, según la opción seleccionada por el usuario (por ejemplo: `"end_date"`, `"category"`, etc.).
+
+---
+
+### 📄 Archivo: `src/services/TaskService.js` (fragmento)
+
+```js
+    switch (orderBy) {
+    case "end_date":
+        result = await TaskService.OrderByEndDate(result);
+        break;
+    case "create_date":
+        result = await TaskService.OrderByCreateDate(result);
+        break;
+    case "category":
+        result = await TaskService.OrderByCategory(result);
+        break;
+    case "incomplete":
+        result = await TaskService.OrderByIncomplete(result);
+        break;
+    default:
+        break;
+    }
+```
+    ✅ Ventajas del uso de Strategy:
+    🧠 Modularidad: cada estrategia está encapsulada, facilitando el mantenimiento y la extensibilidad.
+
+    🧩 Flexibilidad: permite seleccionar dinámicamente cómo ordenar o filtrar sin cambiar la lógica principal.
+
+    🔁 Reutilización: se pueden reutilizar estrategias en otros contextos o servicios fácilmente.
 
 ---
 

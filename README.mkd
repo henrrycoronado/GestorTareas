@@ -26,32 +26,32 @@ Este es un proyecto full-stack para la materia Taller de Diseño de Software (I-
 ### Pasos
 
   1. **Clona el repositorio**:
-    ```bash
+```bash
         git clone https://github.com/henrrycoronado/GestorTareas.git
         cd GestorTareas/Frontend
-    ```
+```
   2. **Instala las dependencias del frontend**:
-    ```bash
+```bash
         npm install
-    ```
+```
   3. **Configura las variables de entorno**:
     Crea un archivo .env en la raíz del proyecto con este contenido:
-    ```bash
+```bash
         VITE_SUPABASE_URL=https://<tu-proyecto>.supabase.co
         VITE_SUPABASE_ANON_KEY=tu-anon-key
-    ```
-    para esta punto dejare un link temporal habilitado con mis variables de entorno funcionales para su ejecucion:
-    ```url
+```
+para esta punto dejare un link temporal habilitado con mis variables de entorno funcionales para su ejecucion:
+```url
         https://docs.google.com/document/d/1DfCpZol7_iqrk7yUHzszvcRYuYSFNGlQqEoup4z6c5s/edit?usp=sharing
-    ```
+```
   4. **Ejecuta el servidor de desarrollo**:
-    ```bash
+```bash
         npm run dev
-    ```
+```
   5. **Ejecuta las pruebas unitarias**:
-    ```bash
+```bash
         npm run test
-    ```
+```
 
 ---
 

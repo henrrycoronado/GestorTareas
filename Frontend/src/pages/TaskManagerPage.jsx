@@ -110,8 +110,14 @@ export const TaskManagerPage = () => {
                     <form onSubmit={handleSubmit} className="space-y-4 mb-8">
                         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Título" required className="w-full p-2 bg-gray-800 rounded-md" />
                         <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción" className="w-full p-2 bg-gray-800 rounded-md" />
-                        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
-                        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
+                        <div>
+                            <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-300">Fecha de inicio</label>
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
+                        </div>
+                        <div>
+                            <label htmlFor="endDate" className="block mb-2 text-sm font-medium text-gray-300">Fecha de finalización</label>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
+                        </div>
                         <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md">
                             <option value="">Selecciona categoría</option>
                             {categories.map(cat => (
@@ -127,7 +133,7 @@ export const TaskManagerPage = () => {
                             <li key={task.id} onClick={() => { setSelectedTask(task); setIsEditing(false); setTitle(task.title); setDescription(task.description); setStartDate(task.start_date); setEndDate(task.end_date); setCategoryId(task.category_id); }} className={`cursor-pointer bg-gray-800 px-4 py-3 rounded-md hover:bg-gray-700 ${selectedTask?.id === task.id ? 'ring-2 ring-blue-500' : ''}`}>
                                 <div className="flex justify-between">
                                     <span>{task.title}</span>
-                                    <span className="text-xs text-gray-400">{task.start_date} → {task.end_date}</span>
+                                    <span className="text-xs text-gray-400">{task.start_date} ➡️ {task.end_date}</span>
                                 </div>
                             </li>
                         ))}
@@ -139,25 +145,44 @@ export const TaskManagerPage = () => {
                     <h3 className="text-xl font-semibold mb-4">🔍 Detalle de Tarea</h3>
                     {selectedTask ? (
                         <div className="space-y-3">
-                            <p><span className="font-medium text-gray-300">ID:</span> {selectedTask.id}</p>
-                            <p><span className="font-medium text-gray-300">Título:</span> {title}</p>
-                            <p><span className="font-medium text-gray-300">Descripción:</span> {description}</p>
-                            <p><span className="font-medium text-gray-300">Fechas:</span> {startDate} - {endDate}</p>
-                            <p><span className="font-medium text-gray-300">Categoría:</span> {categories.find(c => c.id === parseInt(categoryId))?.category_name || 'Sin categoría'}</p>
-
-                            <div className="flex gap-4 justify-center mt-6">
+                            
                                 {isEditing ? (
                                     <>
-                                        <button onClick={handleUpdate} className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-md">💾 Guardar</button>
-                                        <button onClick={handleCancelEdit} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md">❌ Cancelar</button>
+                                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Título" required className="w-full p-2 bg-gray-800 rounded-md" />
+                                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción" className="w-full p-2 bg-gray-800 rounded-md" />
+                                        <div>
+                                            <label htmlFor="startDate" className="block mb-2 text-sm font-medium text-gray-300">Fecha de inicio</label>
+                                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="endDate" className="block mb-2 text-sm font-medium text-gray-300">Fecha de finalización</label>
+                                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md" />
+                                        </div>
+                            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required className="w-full p-2 bg-gray-800 rounded-md">
+                            <option value="">Selecciona categoría</option>
+                            {categories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.category_name}</option>
+                            ))}
+                        </select>
+                                        <div className="flex gap-4 justify-center mt-6">
+                                            <button onClick={handleUpdate} className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-md">💾 Guardar</button>
+                                            <button onClick={handleCancelEdit} className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md">❌ Cancelar</button>
+                                        </div>
                                     </>
                                 ) : (
                                     <>
-                                        <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 rounded-md">✏️ Editar</button>
-                                        <button onClick={handleDelete} className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-md">🗑️ Eliminar</button>
+                                        <p><span className="font-medium text-gray-300">ID:</span> {selectedTask.id}</p>
+                                        <p><span className="font-medium text-gray-300">Título:</span> {title}</p>
+                                        <p><span className="font-medium text-gray-300">Descripción:</span> {description}</p>
+                                        <p><span className="font-medium text-gray-300">Fechas:</span> {startDate} - {endDate}</p>
+                                        <p><span className="font-medium text-gray-300">Categoría:</span> {categories.find(c => c.id === parseInt(categoryId))?.category_name || 'Sin categoría'}</p>
+                                        <div className="flex gap-4 justify-center mt-6">
+                                            <button onClick={handleEdit} className="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 rounded-md">✏️ Editar</button>
+                                            <button onClick={handleDelete} className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-md">🗑️ Eliminar</button>
+                                        </div>
                                     </>
                                 )}
-                            </div>
+                            
                         </div>
                     ) : (
                         <p className="text-gray-400">Selecciona una tarea para ver los detalles.</p>

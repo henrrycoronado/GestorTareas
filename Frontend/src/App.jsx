@@ -10,7 +10,7 @@ import { SignUpPage } from "./pages/SignUpPage";
 import { SignInPage } from "./pages/SignInPage";
 import { TaskManagerPage } from "./pages/TaskManagerPage";
 import { CategoryManagerPage } from "./pages/CategoryManagerPage";
-import { ListObject } from "./pages/ListObjectPage";
+import { ListTask } from "./pages/ListTaskPage";
 import { NotFound } from "./pages/NotFoundPage";
 
 const App = () => {
@@ -24,7 +24,7 @@ const App = () => {
               <Route path="/profile" element={<ProfilePage />}/>
               <Route path="/taskmanager" element={<TaskManagerPage />}/>
               <Route path="/categorymanager" element={<CategoryManagerPage />}/>
-              <Route path="/list/:object/:filter" element={<ListObject />}/>
+              <Route path="/list/task/:date" element={<ListTask />}/>
             </Route>
             <Route element={<ProtectedLogRoute />}>
               <Route path="/signup" element={<SignUpPage />}/>

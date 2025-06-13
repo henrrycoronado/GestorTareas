@@ -6,6 +6,7 @@ import { UserService } from "../services/User/UserService";
 export const DashboardPage = () => {
   const [date, setDate] = useState(new Date());
   const [user, setUser] = useState({
+    id: 0,
     name: "",
     lastname: "",
     email: ""
@@ -82,7 +83,7 @@ export const DashboardPage = () => {
         </button>
       </div>
 
-      <Calendar date={date} />
+      <Calendar date={date} userId={user.id}/>
     </div>
   );
 };

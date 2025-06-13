@@ -1,1 +1,252 @@
-Detalle de creacion y gestion del proyecto:
+# TaskManager (Mini Proyecto CRUD)
+
+Este es un proyecto full-stack para la materia Taller de Diseño de Software (I-2025). El objetivo es crear un sistema web de gestión de tareas donde los usuarios pueden organizar sus actividades en categorías personalizadas, demostrando el ciclo completo de desarrollo de software.
+
+## Tecnologías Usadas
+
+* **Frontend:** React (con Hooks, React Router y Axios para peticiones HTTP).
+* **Backend & Base de Datos:** Supabase (utilizando su servicio de Base de Datos PostgreSQL y Supabase Auth para la autenticación).
+* **Estilo:** Tailwind CSS (para un diseño rápido y moderno).
+* **Pruebas:** Vitest (para las pruebas unitarias del frontend).
+* **Despliegue:** El repositorio está alojado en GitHub.
+
+![Arquitectura general](./Frontend/src/assets/Arquitectura.png)
+
+---
+
+
+## Como ejecutar el proyecto
+
+### Requisitos previos
+
+  - Node.js >= 18
+  - Cuenta de Supabase con un proyecto creado (o para revision usar el proyecto supabase ya creado con las credenciales de prueba adjuntadas en el link mas adelante, si aun esta disponible a la fecha)
+  - Variables de entorno configuradas
+
+### Pasos
+
+  1. **Clona el repositorio**:
+    ```bash
+        git clone https://github.com/henrrycoronado/GestorTareas.git
+        cd GestorTareas/Frontend
+    ```
+  2. **Instala las dependencias del frontend**:
+    ```bash
+        npm install
+    ```
+  3. **Configura las variables de entorno**:
+    Crea un archivo .env en la raíz del proyecto con este contenido:
+    ```bash
+        VITE_SUPABASE_URL=https://<tu-proyecto>.supabase.co
+        VITE_SUPABASE_ANON_KEY=tu-anon-key
+    ```
+    para esta punto dejare un link temporal habilitado con mis variables de entorno funcionales para su ejecucion:
+    ```url
+        https://docs.google.com/document/d/1DfCpZol7_iqrk7yUHzszvcRYuYSFNGlQqEoup4z6c5s/edit?usp=sharing
+    ```
+  4. **Ejecuta el servidor de desarrollo**:
+    ```bash
+        npm run dev
+    ```
+  5. **Ejecuta las pruebas unitarias**:
+    ```bash
+        npm run test
+    ```
+
+---
+
+## Patrones de diseño
+
+## Patrón aplicado: **Singleton**
+
+Se utilizó el patrón **Singleton** para gestionar la instancia de conexión a Supabase. Esto garantiza que toda la aplicación trabaje con una única instancia del cliente Supabase, evitando múltiples inicializaciones innecesarias y facilitando el mantenimiento del código.
+
+### 📄 Archivo: `src/services/supabaseClient.js`
+
+```js
+import { createClient } from "@supabase/supabase-js";
+
+let supabase;
+
+export const getSupabase = () => {
+  if (!supabase) {
+    supabase = createClient(
+      import.meta.env.VITE_SUPABASE_URL,
+      import.meta.env.VITE_SUPABASE_ANON_KEY
+    );
+  }
+  return supabase;
+};
+    ✅ Ventajas del uso de Singleton:
+    🔁 Centraliza la lógica de conexión: el código que se conecta a Supabase está encapsulado en un único archivo reutilizable.
+
+    🚫 Evita múltiples instancias innecesarias: asegura que solo se cree una instancia del cliente Supabase durante todo el ciclo de vida de la aplicación.
+
+    🔧 Facilita el testing y mantenimiento del código: al estar desacoplado, el cliente se puede mockear fácilmente en pruebas unitarias y se puede modificar su configuración en un solo lugar.
+
+## Patrón aplicado: **Repository**
+
+Se implementó el patrón **Repository** mediante el archivo `BussisnessRepository`. Este patrón actúa como una capa de abstracción entre la lógica de negocio y la fuente de datos (Supabase). Permite centralizar el acceso y manipulación de datos de forma coherente y desacoplada del resto de la aplicación.
+
+### 📄 Archivo: `src/services/BussisnessRepository.js`
+
+```js
+    import { supabaseClient }  from '../../supabaseClient';
+
+    export const BussisnessRepository = {
+    InsertData: async (table, columns_names, columns_values, column_return = "ninguno") => {
+        // ...
+    },
+    GetDataValue: async (table, reference_column, reference_value, column_name = "ninguno") => {
+        // ...
+    },
+    UpdateData: async (table, reference_column, reference_value, columns_names, columns_values) => {
+        // ...
+    },
+    GetAll: async (table, reference_column, reference_value) => {
+        // ...
+    },
+    };
+```
+    ✅ Ventajas del uso de Repository:
+    📦 Reutilización: evita duplicación de lógica al interactuar con Supabase desde múltiples servicios.
+
+    🔄 Desacoplamiento: desacopla la fuente de datos de la lógica de negocio.
+
+    🧪 Testeo más sencillo: permite hacer mocking del repositorio para pruebas unitarias sin tocar la base de datos.
+
+
+
+---
+
+## Estructura de proyecto
+
+Estructura de carpetas/archivos funcionales sugerida:
+
+```bash
+    taskmanager/
+    ├── Frontend/
+    │   ├── src/
+    │   │   ├── assets/
+    │   │   ├── components/
+    │   │   ├── pages/
+    │   │   ├── services/
+    │   │   │   └── Category/
+    │   │   │   └── Task/
+    │   │   │   └── User/
+    │   │   │   └── AuthRepository.jsx
+    │   │   │   └── BussisnessRepository.jsx
+    │   │   ├── tests/
+    │   │   └── App.jsx
+    │   │   └── main.jsx
+    │   │   └── index.css      
+    │   ├── .env
+    │   ├── setupTests.js
+    │   ├── supabaseClient.js
+    │   ├── index.html
+    │   └── vite.config.js
+    ├── .gitignore
+    └── README.md
+
+```
+
+![Estructura general](./Frontend/src/assets/Estructura.png)
+
+---
+
+## Descripción del Problema
+
+En la vida diaria, tanto estudiantes como profesionales necesitan una forma organizada y personal de gestionar sus pendientes. Sin una herramienta adecuada, las tareas pueden olvidarse, las fechas límite pueden pasar desapercibidas y la falta de organización puede generar estrés y reducir la productividad. La necesidad es clara: un sistema simple, personal y seguro para administrar tareas y agruparlas de manera lógica.
+
+## Solución Planteada
+
+Para resolver este problema, se desarrolló una aplicación web que permite a los usuarios registrarse y acceder a un dashboard personal. En este espacio, cada usuario puede realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) tanto para sus tareas como para sus categorías.
+
+La aplicación garantiza que la información de cada usuario sea privada y solo accesible por él mismo. Las tareas se pueden asociar a categorías, permitiendo una organización visual y lógica que facilita el seguimiento de los pendientes.
+
+---
+
+
+## Historias de Usuario
+
+### **Historia de Usuario 1: Registro de Nuevo Usuario**
+
+> **Como nuevo usuario,** quiero poder registrarme con mi correo y una contraseña para poder tener una cuenta personal y segura donde guardar mis tareas.
+
+#### Criterios de Aceptación:
+
+**Escenario 1: Registro exitoso**
+* **Dado que** no estoy registrado y me encuentro en la página de `Registro`.
+* **Cuando** ingreso un correo electrónico válido que no ha sido usado antes y una contraseña segura (ej. mínimo 6 caracteres) y hago clic en el botón `Registrarse`.
+* **Entonces** se crea mi cuenta de usuario en el sistema y me muestra un mensaje para que valide el correo en mi inbox  y soy redirigido automáticamente a el `SignIn`.
+
+**Escenario 2: Intento de registro con un correo ya existente**
+* **Dado que** estoy en la página de `Registro`.
+* **Cuando** ingreso un correo electrónico que ya existe en la base de datos y hago clic en el botón `Registrarse`.
+* **Entonces** permanezco en la página de registro y veo un mensaje de error claro, como "Este correo electrónico ya está en uso".
+
+**Escenario 3: Intento de registro con datos inválidos**
+* **Dado que** estoy en la página de `Registro`.
+* **Cuando** ingreso un formato de correo electrónico inválido O una contraseña que no cumple los requisitos de seguridad y hago clic en el botón `Registrarse`.
+* **Entonces** no se crea la cuenta y veo un mensaje de error específico que me indica cuál es el problema (ej. "Formato de correo inválido" o "La contraseña debe tener al menos 6 caracteres").
+
+---
+
+### **Historia de Usuario 2: Gestión de Tareas (CRUD)**
+
+> **Como usuario registrado,** quiero poder crear, ver, editar y eliminar tareas, asignándoles una fecha límite y un estado, para poder llevar un control detallado de mis pendientes.
+
+#### Criterios de Aceptación:
+
+**Escenario 1: Crear una tarea nueva**
+* **Dado que** he iniciado sesión y estoy en mi `Dashboard`.
+* **Cuando** hago clic en el botón `Task Managment` y completo los campos del formulario: `título`, `descripción`, `fecha(s)` y selecciono una `categoría` y hago clic en `Guardar`.
+* **Entonces** la nueva tarea aparece en mi calendario de tareas del `Dashboard` (respecto a la fecha asignada) con el estado "Pendiente" por defecto.
+
+**Escenario 2: Editar una tarea existente**
+* **Dado que** tengo al menos una tarea en mi lista.
+* **Cuando** hago clic en el ícono de `Editar` de una tarea específica y modifico su `descripción` y cambio su `fecha límite` y hago clic en `Guardar`.
+* **Entonces** la tarea en mi lista se actualiza y muestra la nueva información.
+
+**Escenario 3: Marcar una tarea como completada**
+* **Dado que** tengo una tarea con estado "Pendiente".
+* **Cuando** hago clic en la casilla de verificación (checkbox) o en el botón para marcarla como completada.
+* **Entonces** el estado de la tarea cambia a "Completada" y su apariencia visual cambia para reflejar el nuevo estado (ej. texto tachado).
+
+**Escenario 4: Eliminar una tarea**
+* **Dado que** tengo una tarea que ya no necesito.
+* **Cuando** hago clic en el ícono de `Eliminar` de esa tarea y confirmo mi decisión en el diálogo de confirmación (ej. "¿Estás seguro?").
+* **Entonces** la tarea desaparece permanentemente de mi lista.
+
+---
+
+### **Historia de Usuario 3: Gestión de Categorías**
+
+> **Como usuario organizado,** quiero poder crear categorías personalizadas (como "Universidad", "Trabajo" o "Personal") para poder agrupar mis tareas y encontrarlas más fácilmente.
+
+#### Criterios de Aceptación:
+
+**Escenario 1: Crear una nueva categoría**
+* **Dado que** estoy en la página de `Gestionar Categorías`.
+* **Cuando** escribo un nombre para mi nueva categoría (ej. "Estudios de Piano") en el campo de texto y hago clic en el botón `Crear` o `Añadir`.
+* **Entonces** la nueva categoría aparece en mi lista de categorías disponibles.
+
+**Escenario 2: Vincular una tarea a una categoría**
+* **Dado que** he creado al menos una categoría.
+* **Cuando** creo o edito una tarea.
+* **Entonces** el campo `categoría` es un menú desplegable que contiene los nombres de todas las categorías que he creado y puedo seleccionar una de ellas para asignarla a la tarea.
+
+
+
+---
+
+## Lecciones aprendidas
+
+- La **integración de Supabase** permite crear aplicaciones fullstack sin necesidad de construir un backend desde cero, utilizando su servicio de base de datos PostgreSQL y autenticación integrada.
+- Aplicar un **patrón de diseño como Singleton** mejora la estructura del código, asegurando que se utilice una sola instancia de Supabase en toda la aplicación, facilitando el mantenimiento y evitando errores por conexiones duplicadas.
+- La **autenticación y autorización** con Supabase es potente pero requiere cuidado. Validar el `user.id` en cada operación es fundamental para asegurar que los datos sean privados y seguros.
+- Descubrí que las **pruebas unitarias**, aunque pequeñas, ayudan mucho a identificar errores lógicos y asegurar que los componentes funcionen de forma aislada.
+- El uso de **React Router**, junto con hooks como `useState`, `useEffect`, y `useNavigate`, fue esencial para una navegación fluida y manejo efectivo del estado.
+- Gracias a **Tailwind CSS**, fue posible diseñar una interfaz moderna y responsive sin escribir CSS personalizado para cada componente, ahorrando tiempo y esfuerzo.
+
+---

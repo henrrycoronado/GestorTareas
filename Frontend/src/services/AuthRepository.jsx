@@ -1,4 +1,4 @@
-import { supabaseAuthClient } from '../../supabaseClient';
+import { supabaseClient } from '../../supabaseClient';
 
 export const AuthRepository = {
   SignIn: async (email, password) => {
@@ -7,7 +7,7 @@ export const AuthRepository = {
         console.warn("Email o contraseña no proporcionados");
         return null;
       }
-      const supabase = supabaseAuthClient();
+      const supabase = supabaseClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
@@ -29,7 +29,7 @@ export const AuthRepository = {
         console.warn("Email o contraseña no proporcionados para registro");
         return null;
       }
-      const supabase = supabaseAuthClient();
+      const supabase = supabaseClient();
       const { data, error } = await supabase.auth.signUp({
         email,
         password
@@ -47,7 +47,7 @@ export const AuthRepository = {
 
   SignOut: async () => {
     try {
-      const supabase = supabaseAuthClient();
+      const supabase = supabaseClient();
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error("Error al cerrar sesión:", error.message);
@@ -62,7 +62,7 @@ export const AuthRepository = {
 
   GetSession: async () => {
     try {
-      const supabase = supabaseAuthClient();
+      const supabase = supabaseClient();
       const { data, error } = await supabase.auth.getSession();
       if (error) {
         console.error("Error al obtener la sesión actual:", error.message);
@@ -77,7 +77,7 @@ export const AuthRepository = {
 
   CurrentUser: async () => {
     try {
-      const supabase = supabaseAuthClient();
+      const supabase = supabaseClient();
       const { data, error } = await supabase.auth.getUser();
       if (error) {
         console.error("Error al obtener el usuario actual:", error.message);
@@ -89,5 +89,4 @@ export const AuthRepository = {
       return null;
     }
   },
-  
 };

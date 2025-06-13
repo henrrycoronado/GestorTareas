@@ -8,6 +8,9 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { SignUpPage } from "./pages/SignUpPage";
 import { SignInPage } from "./pages/SignInPage";
+import { TaskManagerPage } from "./pages/TaskManagerPage";
+import { CategoryManagerPage } from "./pages/CategoryManagerPage";
+import { ListObject } from "./pages/ListObject";
 
 const App = () => {
   return (
@@ -18,6 +21,9 @@ const App = () => {
             <Route path="/" element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<DashboardPage />}/>
               <Route path="/profile" element={<ProfilePage />}/>
+              <Route path="/taskmanager/:id" element={<TaskManagerPage />}/>
+              <Route path="/categorymanager/:id" element={<CategoryManagerPage />}/>
+              <Route path="/list/:object/:filter" element={<ListObject />}/>
             </Route>
             <Route path="/" element={<ProtectedLogRoute />}>
               <Route path="/signup" element={<SignUpPage />}/>

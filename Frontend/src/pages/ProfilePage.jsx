@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AuthService, UserService } from "../services/User/UserService";
 import { useNavigate } from "react-router-dom";
+import { UserService } from "../services/User/UserService";
 
 export const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -8,7 +8,7 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const currentUser = await AuthService.GetUser();
+      const currentUser = await UserService.GetPerson();
       if (!currentUser) {
         window.alert("Debes iniciar sesión para ver tu perfil.");
         navigate("/signin");
@@ -16,7 +16,6 @@ export const ProfilePage = () => {
       }
       setUser(currentUser);
     };
-
     fetchUser();
   }, [navigate]);
 

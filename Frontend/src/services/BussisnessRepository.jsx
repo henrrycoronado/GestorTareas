@@ -1,13 +1,13 @@
-import { getSupaBaseClient }  from '../../supabaseClient';
+import { supabaseClient }  from '../../supabaseClient';
 
 export const BussisnessRepository = {
-  InsertData: async (schema, table, columns_names, columns_values, column_return = "ninguno") => {
+  InsertData: async (table, columns_names, columns_values, column_return = "ninguno") => {
     try {
-      if (!schema || !table || !columns_names || !columns_values || !column_return) {
+      if (!table || !columns_names || !columns_values || !column_return) {
         console.warn("Datos incompletos al crear fila");
         return null;
       }
-      const supabase = getSupaBaseClient(schema);
+      const supabase = supabaseClient();
       if (columns_names.length !== columns_values.length) {
         console.warn("Los nombres y valores de columnas no coinciden en cantidad");
         return null;
@@ -32,19 +32,20 @@ export const BussisnessRepository = {
     }
   },
 
-  GetDataValue: async (schema, table, reference_column, reference_value, column_name = "ninguno") => {
+  GetDataValue: async (table, reference_column, reference_value, column_name = "ninguno") => {
     try {
-      if (!schema || !table || !column_name || !reference_column || !reference_value) {
+      if (!table || !column_name || !reference_column || !reference_value) {
         console.warn("Datos incompletos al obtener el atributo");
         return null;
       }
-      const supabase = getSupaBaseClient(schema);
+      const supabase = supabaseClient();
       const { data, error } = await supabase
         .from(table)
-        .eq(reference_column, reference_value)
-        .select();
+        .select()
+        .eq(reference_column, reference_value);
+        
       if (error) {
-        console.error("Error al obtener el atributo:", error.message);
+        console.error("Error al obtener el atributo:", error);
       }
       return column_name !== "ninguno" ? data?.[0]?.[column_name] : data?.[0];
     } catch (e) {
@@ -53,13 +54,13 @@ export const BussisnessRepository = {
     }
   },
 
-  UpdateData: async (schema, table, reference_column, reference_value, columns_names, columns_values) => {
+  UpdateData: async (table, reference_column, reference_value, columns_names, columns_values) => {
     try {
-      if (!schema || !table || !reference_column || !reference_value || !columns_names || !columns_values) {
+      if (!table || !reference_column || !reference_value || !columns_names || !columns_values) {
         console.warn("Datos incompletos al actualizar fila");
         return false;
       }
-      const supabase = getSupaBaseClient(schema);
+      const supabase = supabaseClient();
       if (columns_names.length !== columns_values.length) {
         console.warn("Los nombres y valores de columnas no coinciden en cantidad");
         return false;
@@ -69,11 +70,12 @@ export const BussisnessRepository = {
         updateBody[name] = columns_values[index];
       });
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from(table)
-        .update(updateBody)
+        .select()
         .eq(reference_column, reference_value)
-        .select();
+        .update(updateBody);
+        
       if (error) {
         console.error("Error al actualizar los datos en Supabase:", error);
         return false;
@@ -85,24 +87,24 @@ export const BussisnessRepository = {
     }
   },
 
-  GetAllData: async (schema, table) => {
+  GetAll: async (table, reference_column, reference_value) => {
     try {
-      if (!schema || !table) {
-        console.warn("Datos incompletos al obtener todos los registros");
+      if (!table || !reference_column || !reference_value) {
+        console.warn("Datos incompletos al obtener el atributo");
         return null;
       }
-      const supabase = getSupaBaseClient(schema);
+      const supabase = supabaseClient();
       const { data, error } = await supabase
         .from(table)
-        .select();
+        .select()
+        .eq(reference_column, reference_value);
       if (error) {
-        console.error("Error al obtener todos los datos de Supabase:", error);
-        return null;
+        console.error("Error al obtener el atributo:", error.message);
       }
       return data;
     } catch (e) {
-      console.log("Error en el método GetAllData:", e);
+      console.log("Error en el método GetDataValue:", e);
       return null;
     }
-  }
+  },
 };

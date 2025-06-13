@@ -36,7 +36,7 @@ export const SignUpForm = () => {
     if (!userSaved) {
       return window.alert("El usuario no se pudo registrar en la base de datos.");
     }
-    window.alert("Registro exitoso. Ahora puedes iniciar sesión.");
+    window.alert("Registro exitoso. Ingresa a tu correo y verifica tu cuenta.");
     navigate("/");
   };
 

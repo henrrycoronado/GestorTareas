@@ -50,8 +50,8 @@ export const DashboardPage = () => {
       <div className='flex flex-row items-center justify-between h-max w-full px-50'>
         <h1 className="text-3xl font-bold text-white">👋 ¡Hi, {user.name}!</h1>
         <div className='text-white flex flex-row items-center justify-center h-max w-max space-x-10'>
-          <button onClick={()=>navigate('/taskmanager/:0')} >Create Task</button>
-          <button onClick={()=>navigate('/categorymanager/:0')}>Create Category</button>
+          <button onClick={()=>navigate('/taskmanager')} >Managment Task</button>
+          <button onClick={()=>navigate('/categorymanager')}>Managment Category</button>
         </div>
       </div>
 

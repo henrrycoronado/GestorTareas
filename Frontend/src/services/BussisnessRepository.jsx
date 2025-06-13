@@ -3,7 +3,7 @@ import { supabaseClient }  from '../../supabaseClient';
 export const BussisnessRepository = {
   InsertData: async (table, columns_names, columns_values, column_return = "ninguno") => {
     try {
-      if (!table || !columns_names || !columns_values || !column_return) {
+      if (table == null || columns_names == null || columns_values == null || column_return == null) {
         console.warn("Datos incompletos al crear fila");
         return null;
       }
@@ -34,7 +34,7 @@ export const BussisnessRepository = {
 
   GetDataValue: async (table, reference_column, reference_value, column_name = "ninguno") => {
     try {
-      if (!table || !column_name || !reference_column || !reference_value) {
+      if (table == null || column_name == null || reference_column == null || reference_value == null) {
         console.warn("Datos incompletos al obtener el atributo");
         return null;
       }
@@ -42,7 +42,8 @@ export const BussisnessRepository = {
       const { data, error } = await supabase
         .from(table)
         .select()
-        .eq(reference_column, reference_value);
+        .eq(reference_column, reference_value)
+        .eq("state", true);
         
       if (error) {
         console.error("Error al obtener el atributo:", error);
@@ -56,7 +57,7 @@ export const BussisnessRepository = {
 
   UpdateData: async (table, reference_column, reference_value, columns_names, columns_values) => {
     try {
-      if (!table || !reference_column || !reference_value || !columns_names || !columns_values) {
+      if (table == null || reference_column == null || reference_value == null || columns_names == null || columns_values == null) {
         console.warn("Datos incompletos al actualizar fila");
         return false;
       }
@@ -71,10 +72,9 @@ export const BussisnessRepository = {
       });
 
       const { error } = await supabase
-        .from(table)
-        .select()
-        .eq(reference_column, reference_value)
-        .update(updateBody);
+      .from(table)
+      .update(updateBody)
+      .eq(reference_column, reference_value);
         
       if (error) {
         console.error("Error al actualizar los datos en Supabase:", error);
@@ -89,7 +89,8 @@ export const BussisnessRepository = {
 
   GetAll: async (table, reference_column, reference_value) => {
     try {
-      if (!table || !reference_column || !reference_value) {
+      if (table==null || reference_column==null || reference_value ==null) {
+        console.log(table, reference_column, reference_value);
         console.warn("Datos incompletos al obtener el atributo");
         return null;
       }
@@ -97,7 +98,8 @@ export const BussisnessRepository = {
       const { data, error } = await supabase
         .from(table)
         .select()
-        .eq(reference_column, reference_value);
+        .eq(reference_column, reference_value)
+        .eq("state", true);
       if (error) {
         console.error("Error al obtener el atributo:", error.message);
       }

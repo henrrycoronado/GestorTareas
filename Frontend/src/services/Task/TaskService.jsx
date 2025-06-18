@@ -86,7 +86,7 @@ export const TaskService = {
                 tasks.forEach(task => {
                     const taskDate = new Date(task.end_date);
                     if (taskDate.getFullYear() === year && taskDate.getMonth() === month && task.state && task.complete==complete) {
-                        const day = taskDate.getDate();
+                        const day = taskDate.getDate() + 1;
                         if (!map[day]) map[day] = 0;
                         map[day]++;
                     }
